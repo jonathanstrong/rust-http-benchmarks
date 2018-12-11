@@ -1,0 +1,45 @@
+[package]
+name = "rust-http-benchmarks"
+version = "0.1.0"
+authors = ["Jonathan Strong <jonathan.strong@gmail.com>"]
+edition = "2018"
+
+[lib]
+name = "http_benchmarks"
+path = "src/lib.rs"
+
+[[bin]]
+name = "server"
+path = "src/server.rs"
+
+[[bin]]
+name = "client"
+path = "src/client.rs"
+
+[dependencies]
+futures = "0.1.11"
+tokio-core = "0.1.0"
+tokio-io = "0.1"
+tokio-proto = "0.1"
+tokio-service = "0.1"
+slog = "2"
+slog-term = "2"
+slog-async = "2"
+clap = "2"
+jetscii = "0.4.2"
+itoa = "0.4"
+atoi = "0.2.3"
+chrono = { version = "0.4", features = [] }
+hdrhistogram = "6"
+dirs = "1"
+pretty_toa = "1.0.0"
+
+tokio-minihttp = { path = "tokio-minihttp" }
+
+logging = { path = "../logging", version = "0.4.4" }
+
+[features]
+default = []
+trace = ["slog/release_max_level_trace", "slog/max_level_trace", "logging/trace"]
+debug = ["slog/release_max_level_debug", "slog/max_level_debug", "logging/debug"]
+
