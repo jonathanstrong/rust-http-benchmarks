@@ -29,13 +29,13 @@ fn main() {
              .help("Launch a raw tcp client (no TLS, use stunnel bridge if TLS desired), \
                    sending requests to <addr>")
              .takes_value(true)
-             .required(true)) // temporarily
+             .required(false))
         .arg(clap::Arg::with_name("throttle")
              .long("throttle")
              .short("t")
              .help("sleep <n> milliseconds between requests")
              .takes_value(true)
-             .required(false)) // temporarily
+             .required(false))
         .arg(clap::Arg::with_name("openssl-client")
              .long("openssl-client")
              .short("O")
