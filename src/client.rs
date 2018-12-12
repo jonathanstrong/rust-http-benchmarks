@@ -15,12 +15,9 @@ use slog::{Drain, Logger};
 use pretty_toa::ThousandsSep;
 
 fn parse_uri(s: &str) -> Result<http::Uri, http::uri::InvalidUri> {
-    if s.starts_with("http") {
-        http::Uri::from_str(s)
-    } else {
-        let s = format!("https://{}", s);
-        http::Uri::from_str(&s)
-    }
+    let s = if s.starts_with("http") { s.to_string() } else { format!("https://{}", s) };
+    let s = if s.ends_with(":443") { s } else { format!("{}:443", s) };
+    http::Uri::from_str(&s)
 }
 
 fn main() {
