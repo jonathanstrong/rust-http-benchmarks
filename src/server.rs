@@ -43,7 +43,7 @@ impl Service for TokioServer {
     fn call(&self, req: Request) -> Self::Future {
         let loop_time = Instant::now();
         let utc = Utc::now();
-        let time = logging::inanos(utc);
+        let time = http_benchmarks::nanos(utc) as i64;
 
         trace!(self.logger, "new {} request to {}", req.method(), req.path());
 
