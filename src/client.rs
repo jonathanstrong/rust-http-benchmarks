@@ -86,18 +86,20 @@ fn main() {
         if let Ok(_) = io::stdin().read_line(&mut keys) {
             break
         }
-        thread::sleep(Duration::from_millis(100));
+        thread::sleep(Duration::from_millis(10));
     }
 
     info!(logger, "sending terminate signal to worker threads");
     stop.store(true, Ordering::Relaxed);
 
     if let Some(client) = raw_tcp_client {
+        info!(logger, "joining raw tcp client...");
         let n_sent = client.join().unwrap();
         info!(logger, "joined raw tcp client"; "n_sent" => n_sent.thousands_sep());
     }
 
     if let Some(client) = openssl_client {
+        info!(logger, "joining raw tcp+tls[openssl] client...");
         let n_sent = client.join().unwrap();
         info!(logger, "joined raw tcp+tls[openssl] client"; "n_sent" => n_sent.thousands_sep());
     }

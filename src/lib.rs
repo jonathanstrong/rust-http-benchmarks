@@ -41,7 +41,7 @@ pub fn send_strat(n: u16) -> Option<&'static str> {
         9 => Some("chttp-wolfssl-ECDHE-RSA-AES128-SHA"),
         10 => Some("hyper-http-via-stunnel"),
         11 => Some("raw-tcp"),
-        12 => Some("raw-tcp+tls-via-openssl"),
+        12 => Some("raw tcp+tls[openssl]"),
         _ => None
     }
 }
@@ -222,7 +222,7 @@ pub fn openssl_client(
              Content-Length: 22\r\n\r\n\
              {client_code} ",
              path = REQUEST_PATH,
-             host = addr,
+             host = addr.host().unwrap(),
              version = crate_version!(),
              client_code = client_code);
         let n = headers.as_bytes().len();
@@ -238,8 +238,11 @@ pub fn openssl_client(
         'a: while !stop.load(Ordering::Relaxed) {
             loop_time = Instant::now();
             //snd[(length-2)..length].copy_from_slice(&b"\r\n"[..]);
-            TcpStream::connect(addr.authority_part().unwrap().as_str()).map_err(|e| {
-                error!(logger, "failed to connect: {:?}", e);
+            let conn: &str = addr.authority_part().unwrap().as_str();
+            TcpStream::connect(conn).map_err(|e| {
+                error!(logger, "failed to connect: {:?}", e; "addr" => %conn, "uri" => %addr);
+                warn!(logger, "waiting 1s until retry on failed connection attempt");
+                thread::sleep(Duration::from_secs(1));
             }).and_then(|mut stream| {
                 stream.set_nonblocking(true).expect("send nonblocking");
                 stream.set_nodelay(true).expect("send nodelay");
@@ -330,7 +333,7 @@ pub fn openssl_client(
                     #[cfg(any(feature = "trace", feature = "debug"))]
                     thread::sleep(Duration::from_secs(1));
                 }
-            });
+            }).ok();
         }
         n_sent
     })

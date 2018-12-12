@@ -55,7 +55,7 @@ OPTIONS:
     -t, --throttle <throttle>                sleep <n> milliseconds between requests
 ```
 
-## example
+## examples
 
 ### Server/client on same machine:
 
