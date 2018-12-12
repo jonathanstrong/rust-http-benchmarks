@@ -1,6 +1,6 @@
 [package]
 name = "rust-http-benchmarks"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["Jonathan Strong <jonathan.strong@gmail.com>"]
 edition = "2018"
 
@@ -33,13 +33,13 @@ chrono = { version = "0.4", features = [] }
 hdrhistogram = "6"
 dirs = "1"
 pretty_toa = "1.0.0"
+http = "0.1"
+openssl = "0.10"
 
 tokio-minihttp = { path = "tokio-minihttp" }
 
-logging = { path = "../logging", version = "0.4.4" }
-
 [features]
 default = []
-trace = ["slog/release_max_level_trace", "slog/max_level_trace", "logging/trace"]
-debug = ["slog/release_max_level_debug", "slog/max_level_debug", "logging/debug"]
+trace = ["slog/release_max_level_trace", "slog/max_level_trace"]
+debug = ["slog/release_max_level_debug", "slog/max_level_debug"]
 
