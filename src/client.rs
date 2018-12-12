@@ -67,7 +67,7 @@ fn main() {
         //let topo = Arc::clone(&topo);
         let stop = Arc::clone(&stop);
         //raw_tcp_client(addr, 0, topo, stop, &logger)
-        http_benchmarks::raw_tcp_client(addr, stop, throttle, &root)
+        http_benchmarks::clients::raw_tcp_client(addr, stop, throttle, &root)
     });
 
     let openssl_client = args.value_of("openssl-client").map(|addr_arg| {
@@ -77,7 +77,7 @@ fn main() {
         //let topo = Arc::clone(&topo);
         let stop = Arc::clone(&stop);
         //raw_tcp_client(addr, 0, topo, stop, &logger)
-        http_benchmarks::openssl_client(addr, stop, throttle, &root)
+        http_benchmarks::clients::openssl_client(addr, stop, throttle, &root)
     });
 
     info!(logger, "program initialized. press enter key to exit.");
