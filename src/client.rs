@@ -89,6 +89,9 @@ fn main() {
         thread::sleep(Duration::from_millis(100));
     }
 
+    info!(logger, "sending terminate signal to worker threads");
+    stop.store(true, Ordering::Relaxed);
+
     if let Some(client) = raw_tcp_client {
         let n_sent = client.join().unwrap();
         info!(logger, "joined raw tcp client"; "n_sent" => n_sent.thousands_sep());
