@@ -95,9 +95,10 @@ impl Service for TokioServer {
 pub fn tokio_server<A: ToSocketAddrs>(
     addr: A,
     hist_dir: &str,
+    interval: Duration,
     logger: &Logger,
 ) -> thread::JoinHandle<()> {
-    let hist = HistLog::new(hist_dir, "tokio_server", "master", Duration::from_secs(1)).unwrap();
+    let hist = HistLog::new(hist_dir, "tokio_server", "master", interval).unwrap();
     let mut by_client: HashMap<&'static str, HistLog> = Default::default();
     by_client.insert("master", hist);
     let by_client = Arc::new(Mutex::new(by_client));

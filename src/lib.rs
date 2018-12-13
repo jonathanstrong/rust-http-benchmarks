@@ -5,6 +5,8 @@ extern crate slog;
 #[macro_use]
 extern crate jetscii;
 
+use std::net::ToSocketAddrs;
+use std::str::FromStr;
 use chrono::{DateTime, Utc};
 
 pub mod servers;
@@ -36,6 +38,23 @@ pub fn client_tag(n: u16) -> Option<&'static str> {
 #[inline]
 pub fn nanos(t: DateTime<Utc>) -> u64 {
     (t.timestamp() as u64) * 1_000_000_000_u64 + (t.timestamp_subsec_nanos() as u64)
+}
+
+#[doc(hide)]
+pub fn validate_socket_addr(addr: String) -> Result<(), String> {
+    let _ = addr.to_socket_addrs().map_err(|e| {
+        format!("{} (note: port is required, e.g. '127.0.0.1:12345')", e)
+    })?.next().ok_or_else(|| {
+        format!("parsed socket address with `std::net::ToSocketAddrs`, but iterator empty!?")
+    })?;
+    Ok(())
+}
+
+#[doc(hide)]
+pub fn validate_uint(s: String) -> Result<(), String> {
+     u64::from_str(&s).map_err(|e| {
+         format!("{} (expected integer)", e)
+     }).map(|_| ())
 }
 
 #[cfg(test)]
